@@ -153,8 +153,8 @@ function render({ blocks, difficulty, mempool, fees, price }, freshData = true) 
   // Mining & difficulty
   const progress = Math.min(difficulty.progressPercent, 100);
   $("diff-fill").style.width = progress + "%";
-  $("diff-progress").textContent = usd2.format(difficulty.progressPercent) + "% bis zum nächsten Retarget";
-  $("diff-remaining").textContent = num.format(difficulty.remainingBlocks) + " Blöcke";
+  $("diff-progress").textContent = usd2.format(difficulty.progressPercent) + "% until the next retargeting";
+  $("diff-remaining").textContent = num.format(difficulty.remainingBlocks) + " Blocks";
   $("diff-change").innerHTML = signed(difficulty.difficultyChange);
   $("diff-prev").innerHTML = signed(difficulty.previousRetarget);
 }
