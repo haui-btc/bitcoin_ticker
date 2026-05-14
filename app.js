@@ -157,6 +157,9 @@ function render({ blocks, difficulty, mempool, fees, price }, freshData = true) 
   $("diff-remaining").textContent = num.format(difficulty.remainingBlocks) + " Blocks";
   $("diff-change").innerHTML = signed(difficulty.difficultyChange);
   $("diff-prev").innerHTML = signed(difficulty.previousRetarget);
+
+  // keep the converter's fiat side in sync with the fresh price
+  renderConverter();
 }
 
 // ---------- price chart ----------
@@ -495,6 +498,59 @@ $("theme-toggle").addEventListener("click", () => {
   applyTheme(next);
 });
 
+// ---------- sats converter ----------
+// Three linked fields (BTC / sats / fiat). The amount is held canonically in
+// BTC; typing into any field recomputes the other two. The fiat side uses the
+// live price for the currently selected currency.
+const SATS_PER_BTC = 100000000;
+let convBtc = 0;
+
+const convBtcEl = $("conv-btc");
+const convSatsEl = $("conv-sats");
+const convFiatEl = $("conv-fiat");
+
+// current BTC price in the selected currency, or null before the first fetch
+function btcPrice() {
+  return lastData ? lastData.price.bitcoin[currency] : null;
+}
+
+// tolerant number parse — drops thousands separators, accepts a comma decimal
+function parseAmount(str) {
+  const n = parseFloat(str.replace(/\s/g, "").replace(/,/g, "."));
+  return isFinite(n) && n >= 0 ? n : 0;
+}
+
+// 8-decimal BTC string with trailing zeros trimmed
+function trimBtc(v) {
+  return v.toFixed(8).replace(/\.?0+$/, "");
+}
+
+// Repaint every field except the one the user is currently typing into.
+function renderConverter() {
+  const price = btcPrice();
+  const focused = document.activeElement;
+  if (focused !== convBtcEl) convBtcEl.value = convBtc ? trimBtc(convBtc) : "";
+  if (focused !== convSatsEl)
+    convSatsEl.value = convBtc ? num.format(Math.round(convBtc * SATS_PER_BTC)) : "";
+  if (focused !== convFiatEl)
+    convFiatEl.value = convBtc && price ? usd2.format(convBtc * price) : "";
+  $("conv-fiat-label").textContent = CURRENCIES[currency].code;
+}
+
+convBtcEl.addEventListener("input", () => {
+  convBtc = parseAmount(convBtcEl.value);
+  renderConverter();
+});
+convSatsEl.addEventListener("input", () => {
+  convBtc = parseAmount(convSatsEl.value) / SATS_PER_BTC;
+  renderConverter();
+});
+convFiatEl.addEventListener("input", () => {
+  const price = btcPrice();
+  convBtc = price ? parseAmount(convFiatEl.value) / price : 0;
+  renderConverter();
+});
+
 // ---------- currency switch ----------
 const currencySwitch = $("currency-switch");
 function applyCurrency(cur) {
@@ -505,6 +561,7 @@ function applyCurrency(cur) {
   }
   if (lastData) render(lastData, false); // re-render without re-fetching
   drawChart(); // reconvert the chart to the new currency, no re-fetch
+  renderConverter(); // relabel + reconvert the fiat field for the new currency
 }
 applyCurrency(currency);
 
