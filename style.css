@@ -250,6 +250,42 @@ body {
 .fee b { display: block; font-size: 1.6rem; font-weight: 700; color: var(--orange); margin: 0.2rem 0; }
 .fee small { color: var(--muted); font-size: 0.7rem; }
 
+/* ---------- Sats Converter ---------- */
+.converter { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.conv-row {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.6rem 0.85rem;
+  transition: border-color 0.15s;
+}
+.conv-row:focus-within { border-color: var(--orange); }
+.conv-row label {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 3.2rem;
+  flex-shrink: 0;
+}
+.conv-row input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font: 700 1.05rem/1 inherit;
+  text-align: right;
+}
+.conv-row input:focus { outline: none; }
+.conv-row input::placeholder { color: var(--muted); opacity: 0.5; }
+
 /* ---------- Difficulty ---------- */
 .difficulty { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; }
 .diff-bar-wrap { flex: 1; min-width: 220px; }
