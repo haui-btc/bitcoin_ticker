@@ -1,104 +1,50 @@
-# Bitcoin ticker
+# ₿itcoin Ticker
 
-This Python script retrieves real-time Bitcoin blockchain information. It provides details such as Bitcoin price, market cap, transaction fees, mempool information, and mining details.
+A modern web dashboard for real-time Bitcoin data — price, mempool, transaction
+fees and mining/difficulty info. Pure HTML/CSS/JS, no build step and no backend:
+the data is fetched straight from the [mempool.space](https://mempool.space) and
+[CoinGecko](https://www.coingecko.com) APIs in the browser.
+
+This is the web version of the original `bitcoin_ticker.py` console script.
 
 ## Features
 
-- Retrieves real-time information about Bitcoin blockchain.
-- Plays a sound whenever a new block is mined (support for both Linux and Windows systems).
-- Colorful, console-based UI for easy data interpretation.
-- Refresh countdown with a progress bar.
-
-## Requirements
-
-- Python 3
-- Requests
-- Colorama
-- TQDM
-- Pygame (Linux)
-- Winsound (Windows)
-
-## Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/haui-btc/bitcoin_ticker.git
-```
-
-Navigate into the directory:
-
-```bash
-cd bitcoin_ticker
-```
-
-## Install the requirements:
-
-```bash
-pip install -r requirements.txt
-```
-OR
-
-```bash
-sudo apt install python3-requests python3-pygame python3-colorama python3-tqdm
-```
+- Live Bitcoin price, market cap and 24h volume
+- Currency switch: USD / EUR / CHF
+- Latest block details (height, timestamp, hashes, tx count, size)
+- Mempool info (unconfirmed transactions, change since last reload, minimum fee)
+- Transaction fees (low / medium / high priority)
+- Mining & difficulty (progress, remaining blocks, estimated & previous retarget)
+- Auto-refresh every 15s with a countdown bar, plus a manual reload button
+- Light / dark mode (remembers your choice)
 
 ## Usage
 
-Run the script:
+The app is a set of static files. Serve them with any web server — for example
+Python's built-in one:
 
 ```bash
-python bitcoin_ticker.py
+python3 -m http.server 8765
 ```
 
-### Create an alias to run the script
+Then open <http://127.0.0.1:8765> in your browser.
 
-Open your .bashrc file in a text editor.
+> Opening `index.html` directly via `file://` is not recommended — some browsers
+> block the API requests (CORS). Use a local server.
 
-```bash
-vim ~/.bashrc
-```
+## Hosting
 
-Go to the end of the file and add the following line:
+Since there is no backend, the files can be hosted as-is on any static host
+(GitHub Pages, Netlify, Cloudflare Pages, …).
 
-```bash
-alias bitcoin='python /PATH/TO/YOUR/bitcoin_ticker.py'
-```
+## Files
 
-Save the file and exit the editor.
+| File         | Purpose                                  |
+|--------------|------------------------------------------|
+| `index.html` | Page structure                           |
+| `style.css`  | Styling, light/dark themes               |
+| `app.js`     | API calls, rendering, auto-refresh logic |
 
-In order for your current terminal to recognize the new alias, you need to source your .bashrc file with the following command:
+## Credits
 
-```bash
-source ~/.bashrc
-```
-
-Now you can start the bitcoin ticker by simply typing
-
-```bash
-bitcoin
-```
-
-## Information Provided
-
-The script provides real-time information about:
-
-- Bitcoin Price
-- Moscow Time (number of satoshis you can buy at the moment for 1 US Dollar)
-- Marketcap
-- 24 Hour Volume
-- Latest block details (height, timestamp, hash, transaction count, size)
-- Mempool Information (unconfirmed transactions, transaction difference from last reload, minimum fee)
-- Transaction Fees (low priority, medium priority, high priority)
-- Mining Information (difficulty progress, remaining blocks, estimated difficulty change, previous difficulty change)
-
-## Note
-
-- This script uses the APIs from mempool.space and coingecko.com.
-- For playing a sound when a new block is mined, it requires Pygame on Linux and Winsound on Windows.
-- The sound file to be played should be placed in the 'sound' directory with the name 'sound.mp3'.
-
-## Screenshots
-
-![App Screenshot](https://github.com/haui-btc/bitcoin_ticker/blob/main/screenshots/main.png?raw=true)
-![App Screenshot](https://github.com/haui-btc/bitcoin_ticker/blob/main/screenshots/new_block.png?raw=true)
+By [haui-btc](https://github.com/haui-btc). Data from mempool.space & CoinGecko.

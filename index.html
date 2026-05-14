@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>₿itcoin Ticker</title>
+  <meta name="description" content="Live Bitcoin price, mempool, fees and mining data — powered by mempool.space & CoinGecko." />
+  <link rel="preconnect" href="https://mempool.space" />
+  <link rel="preconnect" href="https://api.coingecko.com" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23f7931a'/%3E%3Ctext x='50' y='72' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E%E2%82%BF%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    // applied before paint to avoid a theme flash
+    (function () {
+      var saved = localStorage.getItem("theme");
+      var theme = saved || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <header class="hero">
+    <div class="brand">
+      <span class="logo">₿</span>
+      <div>
+        <h1>Bitcoin Ticker</h1>
+        <p class="tagline">Live on-chain data — by
+          <a href="https://github.com/haui-btc" target="_blank" rel="noopener">haui-btc</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="price-block">
+      <span class="price-label">Bitcoin Price</span>
+      <div class="price-row">
+        <span class="price" id="price">—</span>
+        <span class="price-unit" id="price-unit">USD</span>
+      </div>
+      <span class="change" id="change">—</span>
+      <div class="currency-switch" id="currency-switch">
+        <button data-cur="usd">USD</button>
+        <button data-cur="eur">EUR</button>
+        <button data-cur="chf">CHF</button>
+      </div>
+    </div>
+
+    <div class="refresh">
+      <div class="refresh-bar"><div class="refresh-fill" id="refresh-fill"></div></div>
+      <div class="refresh-meta">
+        <span id="status">Lade Daten…</span>
+        <div class="refresh-actions">
+          <button id="theme-toggle" title="Hell-/Dunkelmodus umschalten" aria-label="Theme umschalten">🌙</button>
+          <button id="reload" title="Jetzt neu laden" aria-label="Neu laden">↻</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="grid">
+    <!-- Price / Marketcap -->
+    <section class="card">
+      <h2><span class="dot"></span>Price &amp; Marketcap</h2>
+      <ul class="stats">
+        <li><span>Moscow Time</span><b id="moscow">—</b></li>
+        <li><span>Marketcap</span><b id="mcap">—</b></li>
+        <li><span>24h Volume</span><b id="vol">—</b></li>
+        <li><span>24h Change</span><b id="change24">—</b></li>
+      </ul>
+    </section>
+
+    <!-- Blockchain Info -->
+    <section class="card">
+      <h2><span class="dot"></span>Blockchain</h2>
+      <ul class="stats">
+        <li><span>Latest Block</span><b id="height">—</b></li>
+        <li><span>Timestamp</span><b id="blocktime">—</b></li>
+        <li><span>TX Count</span><b id="txcount">—</b></li>
+        <li><span>Block Size</span><b id="blocksize">—</b></li>
+        <li class="mono"><span>Block Hash</span><b id="blockhash">—</b></li>
+        <li class="mono"><span>Previous Hash</span><b id="prevhash">—</b></li>
+      </ul>
+    </section>
+
+    <!-- Mempool -->
+    <section class="card">
+      <h2><span class="dot"></span>Mempool</h2>
+      <ul class="stats">
+        <li><span>Unconfirmed TX</span><b id="mempool">—</b></li>
+        <li><span>Since last reload</span><b id="mempool-diff">—</b></li>
+        <li><span>Minimum Fee</span><b id="minfee">—</b></li>
+      </ul>
+    </section>
+
+    <!-- Transaction Fees -->
+    <section class="card">
+      <h2><span class="dot"></span>Transaction Fees</h2>
+      <div class="fees">
+        <div class="fee"><span>Low</span><b id="fee-low">—</b><small>sat/vB</small></div>
+        <div class="fee"><span>Medium</span><b id="fee-med">—</b><small>sat/vB</small></div>
+        <div class="fee"><span>High</span><b id="fee-high">—</b><small>sat/vB</small></div>
+      </div>
+    </section>
+
+    <!-- Mining -->
+    <section class="card card-wide">
+      <h2><span class="dot"></span>Mining &amp; Difficulty</h2>
+      <div class="difficulty">
+        <div class="diff-bar-wrap">
+          <div class="diff-bar"><div class="diff-fill" id="diff-fill"></div></div>
+          <span id="diff-progress">—</span>
+        </div>
+        <ul class="stats">
+          <li><span>Remaining Blocks</span><b id="diff-remaining">—</b></li>
+          <li><span>Estimated Change</span><b id="diff-change">—</b></li>
+          <li><span>Previous Retarget</span><b id="diff-prev">—</b></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Data: <a href="https://mempool.space" target="_blank" rel="noopener">mempool.space</a>
+       &amp; <a href="https://www.coingecko.com" target="_blank" rel="noopener">CoinGecko</a>
+       · Open source on <a href="https://github.com/haui-btc" target="_blank" rel="noopener">GitHub</a></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
