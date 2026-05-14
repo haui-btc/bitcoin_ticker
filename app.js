@@ -77,7 +77,7 @@ async function getJSON(url) {
 }
 
 async function loadData() {
-  $("status").textContent = "Aktualisiere…";
+  $("status").textContent = "Updating…";
   try {
     const [blocks, difficulty, mempool, fees, price] = await Promise.all([
       getJSON(API.blocks),
@@ -91,11 +91,11 @@ async function loadData() {
     render(lastData);
     document.body.classList.remove("loading");
     $("status").textContent =
-      "Aktualisiert " +
+      "Last updated at " +
       new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
   } catch (err) {
     console.error(err);
-    $("status").textContent = "⚠ Fehler beim Laden — neuer Versuch in " + REFRESH_SECONDS + "s";
+    $("status").textContent = "⚠ Error loading — retrying in " + REFRESH_SECONDS + "s";
   }
 }
 
