@@ -7,6 +7,8 @@ the data is fetched straight from the [mempool.space](https://mempool.space) and
 
 This is the web version of the original `bitcoin_ticker.py` console script.
 
+![Bitcoin Ticker dashboard (dark mode)](images/bitcoin_ticker_dark.png)
+
 ## Features
 
 - Live Bitcoin price, market cap and 24h volume
