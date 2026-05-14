@@ -10,7 +10,7 @@ const API = {
   fees: "https://mempool.space/api/v1/fees/recommended",
   price:
     "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,eur,chf" +
-    "&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true",
+    "&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&precision=2",
   // 5-minute granularity for the 24h chart (mempool.space history is hourly)
   chart24h: "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1",
 };
@@ -40,6 +40,8 @@ const $ = (id) => document.getElementById(id);
 const usd0 = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
 const usd1 = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 const usd2 = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
+// hero price — always exactly 2 decimals, e.g. 79,611.28
+const price2 = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const num = new Intl.NumberFormat("en-US");
 
 function compactCur(n) {
@@ -105,7 +107,7 @@ function render({ blocks, difficulty, mempool, fees, price }, freshData = true) 
   const change = btc[currency + "_24h_change"];
 
   // Price & Marketcap
-  $("price").textContent = usd0.format(value);
+  $("price").textContent = price2.format(value);
   $("price-unit").textContent = cur.code;
   $("change").innerHTML = signed(change);
   $("change").className = "change " + (change >= 0 ? "up" : "down");
