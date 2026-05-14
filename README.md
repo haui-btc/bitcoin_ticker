@@ -32,6 +32,21 @@ Then open <http://127.0.0.1:8765> in your browser.
 > Opening `index.html` directly via `file://` is not recommended — some browsers
 > block the API requests (CORS). Use a local server.
 
+### Docker
+
+The repo ships a Dockerfile (nginx serving the static files) and a Compose file:
+
+```bash
+docker compose up -d --build
+```
+
+Then open <http://localhost:8080>. Without Compose:
+
+```bash
+docker build -t bitcoin-ticker .
+docker run -d -p 8080:80 --name bitcoin-ticker bitcoin-ticker
+```
+
 ## Hosting
 
 Since there is no backend, the files can be hosted as-is on any static host
@@ -39,11 +54,14 @@ Since there is no backend, the files can be hosted as-is on any static host
 
 ## Files
 
-| File         | Purpose                                  |
-|--------------|------------------------------------------|
-| `index.html` | Page structure                           |
-| `style.css`  | Styling, light/dark themes               |
-| `app.js`     | API calls, rendering, auto-refresh logic |
+| File                 | Purpose                                  |
+|----------------------|------------------------------------------|
+| `index.html`         | Page structure                           |
+| `style.css`          | Styling, light/dark themes               |
+| `app.js`             | API calls, rendering, auto-refresh logic |
+| `Dockerfile`         | nginx image serving the static files     |
+| `nginx.conf`         | nginx config (gzip, cache headers)       |
+| `docker-compose.yml` | Compose service, maps port 8080          |
 
 ## Credits
 
