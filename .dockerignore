@@ -1,0 +1,9 @@
+.git
+.gitignore
+.claude
+.cursor
+README.md
+Dockerfile
+docker-compose.yml
+.dockerignore
+*.py

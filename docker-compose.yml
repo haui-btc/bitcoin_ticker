@@ -1,0 +1,8 @@
+services:
+  bitcoin-ticker:
+    build: .
+    image: bitcoin-ticker
+    container_name: bitcoin-ticker
+    ports:
+      - "8080:80"
+    restart: unless-stopped
