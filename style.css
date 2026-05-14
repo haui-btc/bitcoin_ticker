@@ -177,6 +177,7 @@ body {
 /* spans two columns so it fills the gap next to Transaction Fees;
    the grid clamps the span when fewer columns are available */
 .card-wide { grid-column: span 2; }
+.card-full { grid-column: 1 / -1; }
 
 .card h2 {
   display: flex;
@@ -252,6 +253,75 @@ body {
 
 .pos { color: var(--green); }
 .neg { color: var(--red); }
+
+/* ---------- Chart ---------- */
+.chart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.chart-head h2 { margin-bottom: 0; }
+
+.range-switch {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--border);
+  border-radius: 9px;
+}
+.range-switch button {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font: 600 0.76rem/1 inherit;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.range-switch button:hover:not(.active) { color: var(--text); }
+.range-switch button.active { background: var(--orange); color: #fff; }
+
+.chart-wrap { position: relative; width: 100%; }
+#chart { display: block; width: 100%; height: 320px; }
+#chart .area { fill: url(#chartFill); }
+#chart .line {
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+#chart .axis { fill: var(--muted); font-size: 11px; font-weight: 600; }
+#chart .axis.x { text-anchor: middle; }
+#chart .grid-line { stroke: var(--border); stroke-width: 1; opacity: 0.55; }
+#chart .g0 { stop-color: var(--orange); stop-opacity: 0.35; }
+#chart .g1 { stop-color: var(--orange); stop-opacity: 0; }
+#chart .hv-line { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+#chart .hv-dot { fill: var(--orange); stroke: var(--card); stroke-width: 2; }
+.chart-tooltip {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transform: translate(-50%, -125%);
+}
+.chart-tooltip span {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 400;
+}
+.chart-meta { margin-top: 0.7rem; color: var(--muted); font-size: 0.82rem; }
 
 /* ---------- Footer ---------- */
 footer {
