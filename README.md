@@ -5,7 +5,7 @@ fees and mining/difficulty info. Pure HTML/CSS/JS, no build step and no backend:
 the data is fetched straight from the [mempool.space](https://mempool.space) and
 [CoinGecko](https://www.coingecko.com) APIs in the browser.
 
-![Bitcoin Ticker dashboard (dark mode)](images/bitcoin_ticker_dark.png)
+![Bitcoin Ticker dashboard (dark mode)](images/bitcoin_ticker.png)
 
 ## Features
 
