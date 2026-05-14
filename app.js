@@ -217,12 +217,13 @@ function niceTicks(min, max, count) {
 
 // Evenly-spaced time labels for the X-axis — hours / dates / years depending
 // on how long the visible range is. Mirrors how CoinGecko labels its Max view.
-function makeTimeTicks(t0, t1) {
+function makeTimeTicks(t0, t1, plotW) {
   const HOUR = 3600, DAY = 86400;
   const span = t1 - t0;
   const ticks = [];
   if (span <= 2 * DAY) {
-    const step = 4 * HOUR;
+    // fewer ticks on narrow (mobile) charts so the labels don't overlap
+    const step = (plotW < 480 ? 8 : 4) * HOUR;
     for (let t = Math.ceil(t0 / step) * step; t <= t1; t += step) {
       ticks.push({
         t,
@@ -354,7 +355,7 @@ function drawChart() {
 
   // vertical grid + time labels along the bottom — years on the Max view
   let xGrid = "";
-  for (const tk of makeTimeTicks(pts[0].t, pts[pts.length - 1].t)) {
+  for (const tk of makeTimeTicks(pts[0].t, pts[pts.length - 1].t, plotW)) {
     const x = xForTime(tk.t, pts, getX);
     const labelX = Math.max(14, Math.min(plotW - 14, x));
     xGrid +=

@@ -354,7 +354,15 @@ footer {
 /* loading shimmer */
 .loading b, .loading .price { opacity: 0.35; }
 
+/* stack every card in a single column once two columns no longer fit */
+@media (max-width: 720px) {
+  .grid { grid-template-columns: 1fr; }
+  .card-wide, .card-full { grid-column: 1 / -1; }
+}
+
 @media (max-width: 560px) {
   .hero { flex-direction: column; align-items: stretch; }
   .price-block { align-items: flex-start; }
+  .chart-head { flex-wrap: wrap; }
+  .card { padding: 1.25rem; }
 }
