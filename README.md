@@ -10,6 +10,7 @@ the data is fetched straight from the [mempool.space](https://mempool.space) and
 ## Features
 
 - Live Bitcoin price, market cap and 24h volume
+- Sats converter — convert between BTC, sats and fiat at the live price
 - Currency switch: USD / EUR / CHF
 - Latest block details (height, timestamp, hashes, tx count, size)
 - Mempool info (unconfirmed transactions, change since last reload, minimum fee)
