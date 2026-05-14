@@ -125,8 +125,10 @@ function render({ blocks, difficulty, mempool, fees, price }, freshData = true) 
   $("blocksize").textContent = usd2.format(b.size / 1000) + " kB";
   $("blockhash").textContent = shortHash(b.id);
   $("blockhash").title = b.id;
+  $("blockhash").dataset.full = b.id;
   $("prevhash").textContent = shortHash(b.previousblockhash);
   $("prevhash").title = b.previousblockhash;
+  $("prevhash").dataset.full = b.previousblockhash;
 
   // Mempool — only recompute the diff on a fresh fetch, not on a currency switch
   $("mempool").textContent = num.format(mempool.count);
@@ -508,6 +510,21 @@ applyCurrency(currency);
 currencySwitch.addEventListener("click", (e) => {
   const btn = e.target.closest("button");
   if (btn) applyCurrency(btn.dataset.cur);
+});
+
+// ---------- copy hashes to clipboard ----------
+document.querySelectorAll(".copy-btn").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const full = $(btn.dataset.copy).dataset.full;
+    if (!full) return;
+    try {
+      await navigator.clipboard.writeText(full);
+      btn.classList.add("copied");
+      setTimeout(() => btn.classList.remove("copied"), 1200);
+    } catch (err) {
+      console.error("Kopieren fehlgeschlagen:", err);
+    }
+  });
 });
 
 // pause the countdown while the tab is hidden, refresh on return
