@@ -109,8 +109,7 @@ function render({ blocks, difficulty, mempool, fees, price }, freshData = true) 
   // Price & Marketcap
   $("price").textContent = price2.format(value);
   $("price-unit").textContent = cur.code;
-  $("change").innerHTML = signed(change);
-  $("change").className = "change " + (change >= 0 ? "up" : "down");
+  // the hero %-change tracks the chart's selected range — see drawChart()
   $("change24").innerHTML = signed(change);
   $("moscow").textContent = num.format(Math.round(100000000 / value)) + " sat/" + cur.symbol.trim();
   $("mcap").textContent = compactCur(btc[currency + "_market_cap"]);
@@ -395,6 +394,18 @@ function drawChart() {
   const fmtDate = (t) => new Date(t * 1000).toLocaleDateString("de-DE");
   $("chart-meta").innerHTML =
     `${fmtDate(pts[0].t)} – ${fmtDate(pts[pts.length - 1].t)} · ` + changeHtml;
+
+  // mirror the period change onto the hero price's %-badge.
+  // "Max" reaches back to mempool.space's earliest point (~2010), so the
+  // number dwarfs CoinGecko's — spell out the start year in the tooltip.
+  const RANGE_LABELS = { "1": "24h", "7": "7d", "30": "30d" };
+  const hero = $("change");
+  hero.innerHTML = changeHtml;
+  hero.className = "change " + (change >= 0 ? "up" : "down");
+  hero.dataset.tip =
+    chartRange === "max"
+      ? "Veränderung seit " + new Date(pts[0].t * 1000).getFullYear()
+      : RANGE_LABELS[chartRange] + " change";
 }
 
 function onChartHover(e) {

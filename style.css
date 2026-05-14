@@ -94,9 +94,31 @@ body {
 .price-row { display: flex; align-items: baseline; gap: 0.4rem; }
 .price { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; letter-spacing: -0.03em; }
 .price-unit { color: var(--muted); font-weight: 600; }
-.change { font-size: 0.9rem; font-weight: 600; }
+.change { font-size: 0.9rem; font-weight: 600; position: relative; }
 .change.up { color: var(--green); }
 .change.down { color: var(--red); }
+
+/* instant hover tooltip — the native title attribute has a ~1s browser delay */
+.change[data-tip] { cursor: help; }
+.change[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 6px;
+  padding: 0.3rem 0.5rem;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.08s;
+}
+.change[data-tip]:hover::after { opacity: 1; }
 
 .currency-switch {
   display: flex;
