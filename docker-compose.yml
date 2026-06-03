@@ -4,5 +4,5 @@ services:
     image: bitcoin-ticker
     container_name: bitcoin-ticker
     ports:
-      - "8080:80"
+      - "5000:80"
     restart: unless-stopped
