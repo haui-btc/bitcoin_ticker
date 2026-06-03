@@ -2,8 +2,6 @@
 
 **[Live demo: https://haui-btc.github.io/bitcoin_ticker/](https://haui-btc.github.io/bitcoin_ticker/)**
 
-Ein modernes, echtzeit Bitcoin-Dashboard mit Live-Preisen, Mempool-Daten, Gebührenschätzungen und Mining-Informationen. Ideal für Bitcoiner, die wichtige Blockchain-Metriken auf einen Blick überblicken möchten. Das Projekt wird ohne Backend oder externe Abhängigkeiten betrieben – alle Daten werden direkt im Browser von frei verfügbaren APIs abgerufen.
-
 A modern, real-time Bitcoin dashboard — price, mempool, transaction fees and
 mining/difficulty data at a glance. Built with pure HTML, CSS and JavaScript:
 no build step, no backend, no dependencies. All data is fetched directly in the
