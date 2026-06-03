@@ -184,13 +184,33 @@ function fxFactor() {
   return 1;
 }
 
-// Thin a long series down to ~max points so the SVG path stays light.
-function downsample(arr, max) {
-  if (arr.length <= max) return arr;
+// Thin a long series to ~`buckets` segments spaced evenly in TIME, keeping
+// the SVG path light. The history is weekly before 2022 but hourly after, so
+// thinning by array index would crush the pre-2022 years into a sliver and
+// drop the 2010–2021 peaks. We bucket by time and keep each bucket's high and
+// low (in time order) so spikes like 2017/2021 survive. Stays time-sorted.
+function downsampleByTime(arr, buckets) {
+  if (arr.length <= buckets * 2) return arr;
+  const t0 = arr[0].t;
+  const span = arr[arr.length - 1].t - t0 || 1;
   const out = [];
-  const stride = arr.length / max;
-  for (let i = 0; i < max; i++) out.push(arr[Math.floor(i * stride)]);
-  out.push(arr[arr.length - 1]);
+  let bi = -1, lo = null, hi = null;
+  const flush = () => {
+    if (!lo) return;
+    if (lo === hi) out.push(lo);
+    else if (lo.t <= hi.t) out.push(lo, hi);
+    else out.push(hi, lo);
+  };
+  for (const p of arr) {
+    const b = Math.min(buckets - 1, Math.floor(((p.t - t0) / span) * buckets));
+    if (b !== bi) { flush(); lo = hi = null; bi = b; }
+    if (!lo || p.usd < lo.usd) lo = p;
+    if (!hi || p.usd > hi.usd) hi = p;
+  }
+  flush();
+  // pin the exact first/last sample so the range edges stay accurate
+  if (out[0] !== arr[0]) out.unshift(arr[0]);
+  if (out[out.length - 1] !== arr[arr.length - 1]) out.push(arr[arr.length - 1]);
   return out;
 }
 
@@ -330,13 +350,19 @@ function drawChart() {
   const span = RANGES[chartRange].seconds;
   let pts = span === Infinity ? source : source.filter((p) => now - p.t <= span);
   if (pts.length < 2) pts = source.slice(-2);
-  pts = downsample(pts, 800);
+  pts = downsampleByTime(pts, 400);
 
   const factor = fxFactor();
   const vals = pts.map((p) => p.usd * factor);
   const min = Math.min(...vals);
   const max = Math.max(...vals);
-  const getX = (i) => (i / (pts.length - 1)) * plotW;
+  // X comes from each point's TIMESTAMP, not its array index — the history is
+  // weekly before 2022 but hourly after, so index spacing would squeeze
+  // 2010–2021 into a sliver. Time spacing gives every year its true width,
+  // matching CoinGecko's Max view.
+  const tStart = pts[0].t;
+  const tSpan = pts[pts.length - 1].t - tStart || 1;
+  const getX = (i) => ((pts[i].t - tStart) / tSpan) * plotW;
   const getY = (v) => padT + plotH - ((v - min) / (max - min || 1)) * plotH;
 
   let line = "";
@@ -413,8 +439,17 @@ function onChartHover(e) {
   const { pts, factor, getX, getY, plotW, viewW } = chartCtx;
   const rect = $("chart").getBoundingClientRect();
   const vx = ((e.clientX - rect.left) / rect.width) * viewW; // cursor in viewBox units
-  let i = Math.round((vx / plotW) * (pts.length - 1));
-  i = Math.max(0, Math.min(pts.length - 1, i));
+  // X is mapped by time, so resolve the cursor to the nearest sample by
+  // timestamp (a plain index ratio would land on the wrong point)
+  const cursorX = Math.max(0, Math.min(plotW, vx));
+  const targetT = pts[0].t + (cursorX / plotW) * (pts[pts.length - 1].t - pts[0].t);
+  let lo = 0, hi = pts.length - 1;
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (pts[mid].t < targetT) lo = mid;
+    else hi = mid;
+  }
+  const i = targetT - pts[lo].t <= pts[hi].t - targetT ? lo : hi;
   const p = pts[i];
   const cx = getX(i);
   const cy = getY(p.usd * factor);
