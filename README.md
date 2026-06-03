@@ -61,7 +61,7 @@ Or with Docker directly:
 
 ```bash
 docker build -t bitcoin-ticker .
-docker run -d -p 5000:80 --name bitcoin-ticker bitcoin-ticker
+docker run -d -p 5001:80 --name bitcoin-ticker bitcoin-ticker
 ```
 
 Then open <http://localhost:5001>.
