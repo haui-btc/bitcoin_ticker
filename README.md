@@ -61,10 +61,10 @@ Or with Docker directly:
 
 ```bash
 docker build -t bitcoin-ticker .
-docker run -d -p 8080:80 --name bitcoin-ticker bitcoin-ticker
+docker run -d -p 5000:80 --name bitcoin-ticker bitcoin-ticker
 ```
 
-Then open <http://localhost:8080>.
+Then open <http://localhost:5000>.
 
 ## Deployment
 
@@ -80,7 +80,7 @@ GitHub Pages, Netlify, Cloudflare Pages, or similar.
 | `app.js`             | API calls, rendering and auto-refresh logic   |
 | `Dockerfile`         | nginx image serving the static files          |
 | `nginx.conf`         | nginx configuration (gzip, cache headers)     |
-| `docker-compose.yml` | Compose service definition, maps port 8080    |
+| `docker-compose.yml` | Compose service definition, maps port 5000    |
 
 ## Credits
 
