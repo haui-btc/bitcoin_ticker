@@ -145,9 +145,10 @@ function render({ blocks, difficulty, mempool, fees, price }, freshData = true) 
   $("minfee").textContent = fees.minimumFee + " sat/vB";
 
   // Transaction fees
-  $("fee-low").textContent = fees.hourFee;
-  $("fee-med").textContent = fees.halfHourFee;
-  $("fee-high").textContent = fees.fastestFee;
+  const fmtFee = (v) => { const r = Math.round(v * 10) / 10; return r % 1 === 0 ? r : r.toFixed(1); };
+  $("fee-low").textContent = fmtFee(fees.hourFee);
+  $("fee-med").textContent = fmtFee(fees.halfHourFee);
+  $("fee-high").textContent = fmtFee(fees.fastestFee);
 
   // Mining & difficulty
   const progress = Math.min(difficulty.progressPercent, 100);
